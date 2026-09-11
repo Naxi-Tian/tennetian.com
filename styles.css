@@ -11,6 +11,13 @@
 /* Preserve the About portrait's original color and tonal balance. */
 .portrait-frame img{filter:none}
 
+/* Modular Drones uses the supplied transparent system icon as its cover. */
+.drone-icon-media{background:var(--acid)}
+.drone-icon-media img{object-fit:contain;padding:24px;filter:none}
+.project-card:hover .drone-icon-media img{filter:none;transform:scale(1.025)}
+.drone-modal{background:var(--acid)}
+.drone-modal img{width:min(440px,80%);height:auto;filter:none}
+
 /* Cinematic homepage — footage can be extended by adding another video and cue. */
 .site-header{position:fixed;inset:0 0 auto;background:linear-gradient(to bottom,rgba(3,6,11,.82),rgba(3,6,11,.48));border-bottom-color:rgba(255,255,255,.12)}
 section[id]{scroll-margin-top:66px}

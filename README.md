@@ -19,7 +19,7 @@ Then open `http://localhost:8080`.
 - `script.js` — navigation, filters, in-page project details, and scroll interactions
 - `assets/` — selected photography from the prior website
 - `assets/video/` — optimized front-page footage; add future clips to the hero sequence in `index.html`
-- `TenneTian-Resume.pdf` — downloadable current résumé
+- `TenneTian-Resume-Final-9.11.pdf` — downloadable current résumé
 
 ## Production domain
 
