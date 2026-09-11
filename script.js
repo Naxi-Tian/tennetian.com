@@ -79,10 +79,27 @@ const dialog = document.querySelector('#project-dialog');
 const dialogContent = dialog?.querySelector('.dialog-content');
 const closeButton = dialog?.querySelector('.dialog-close');
 
+function hydrateYouTubeEmbeds(root = document) {
+  if (location.protocol === 'file:') return;
+  root.querySelectorAll('.youtube-embed[data-youtube-id]').forEach((container) => {
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${container.dataset.youtubeId}?rel=0&playsinline=1`;
+    iframe.title = 'Graphene pollen sensor project video';
+    iframe.loading = 'lazy';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    iframe.allowFullscreen = true;
+    container.replaceChildren(iframe);
+  });
+}
+
+hydrateYouTubeEmbeds();
+
 document.querySelectorAll('.project-open').forEach((button) => button.addEventListener('click', () => {
   const template = button.closest('.project-card')?.querySelector('template');
   if (!dialog || !dialogContent || !template) return;
   dialogContent.replaceChildren(template.content.cloneNode(true));
+  hydrateYouTubeEmbeds(dialogContent);
   const title = dialogContent.querySelector('h2');
   if (title) title.id = 'dialog-title';
   dialog.showModal();
@@ -90,6 +107,10 @@ document.querySelectorAll('.project-open').forEach((button) => button.addEventLi
 }));
 
 function closeDialog() {
+  dialogContent?.querySelectorAll('video').forEach((video) => video.pause());
+  dialogContent?.querySelectorAll('iframe').forEach((frame) => {
+    frame.src = frame.src;
+  });
   dialog?.close();
   document.body.style.overflow = '';
 }
