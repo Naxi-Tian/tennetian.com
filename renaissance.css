@@ -33,7 +33,7 @@ body:before{opacity:.045;background-image:url("data:image/svg+xml,%3Csvg viewBox
 .menu-toggle>span:not(.sr-only){background:var(--ink)}
 
 .video-hero{background:#3d3028}
-.hero-video{filter:sepia(.22) saturate(.72) contrast(.96) brightness(.88)}
+.hero-video{filter:none}
 .video-shade{background:linear-gradient(90deg,rgba(40,25,18,.58),rgba(62,42,30,.23) 48%,rgba(35,23,17,.48)),linear-gradient(to top,rgba(39,25,18,.68),transparent 50%,rgba(40,25,18,.3))}
 .video-hero:after{background-image:linear-gradient(rgba(244,225,199,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(244,225,199,.045) 1px,transparent 1px);background-size:72px 72px;mix-blend-mode:screen}
 .video-hero h1{font-family:var(--display);font-weight:400;letter-spacing:-.035em}
