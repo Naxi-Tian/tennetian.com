@@ -60,6 +60,70 @@ const dialog = document.querySelector('#project-dialog');
 const dialogContent = dialog?.querySelector('.dialog-content');
 const closeButton = dialog?.querySelector('.dialog-close');
 
+const supplementalGalleries = {
+  iris: [
+    ['assets/projects/iris/gallery/object-detection.png', 'IRIS identifying a bottle and generating context-aware communication choices'],
+    ['assets/projects/iris/gallery/wearable-design.png', 'Wearable frame and camera-arm design'],
+    ['assets/projects/iris/gallery/problem-context.png', 'The communication challenge that motivated IRIS'],
+    ['assets/projects/iris/gallery/iris-prototype.png', 'The assembled IRIS eye-tracking prototype'],
+  ],
+  scent: [
+    ['assets/projects/scent/gallery/clustered-sensor-data.png', 'Clustered IAQ, VOC, and gas-resistance measurements over time'],
+    ['assets/projects/scent/gallery/test-chamber.png', 'A scent sample inside the prototype test chamber'],
+    ['assets/projects/scent/gallery/mq-gas-sensor.png', 'MQ-series gas sensor used in the sensing system'],
+  ],
+  pollenNetwork: [
+    ['assets/projects/pollen-network/gallery/field-station.png', 'A pollen monitoring station deployed outdoors'],
+    ['assets/projects/pollen-network/gallery/station-cap.png', 'The station’s protective collection cap'],
+    ['assets/projects/pollen-network/gallery/electronics-prototype.jpg', 'Breadboard electronics and airflow prototype'],
+  ],
+};
+
+function createSupplementalGallery(projectKey, forProjectPage = false) {
+  const images = supplementalGalleries[projectKey];
+  if (!images) return null;
+  const pathPrefix = forProjectPage ? '../' : '';
+  const section = document.createElement('section');
+  section.className = 'detail-gallery-section';
+  section.dataset.gallery = projectKey;
+  const heading = document.createElement('h3');
+  heading.textContent = 'Project gallery';
+  const grid = document.createElement('div');
+  grid.className = `detail-photo-grid detail-photo-grid-${images.length}`;
+  images.forEach(([source, caption]) => {
+    const figure = document.createElement('figure');
+    const image = document.createElement('img');
+    image.src = `${pathPrefix}${source}`;
+    image.alt = caption;
+    image.loading = 'lazy';
+    const figcaption = document.createElement('figcaption');
+    figcaption.textContent = caption;
+    figure.append(image, figcaption);
+    grid.append(figure);
+  });
+  section.append(heading, grid);
+  return section;
+}
+
+function galleryKeyForTitle(title = '') {
+  if (title.includes('IRIS')) return 'iris';
+  if (title.includes('Scent Sensor')) return 'scent';
+  if (title.includes('Pollen Detection Network')) return 'pollenNetwork';
+  return null;
+}
+
+function mountProjectPageGallery() {
+  const projectKey = location.pathname.endsWith('/iris.html') ? 'iris'
+    : location.pathname.endsWith('/scent-classifier.html') ? 'scent'
+      : location.pathname.endsWith('/pollen-network.html') ? 'pollenNetwork' : null;
+  if (!projectKey || document.querySelector(`[data-gallery="${projectKey}"]`)) return;
+  const existingGallery = document.querySelector('.case-row:last-of-type .project-gallery');
+  const gallery = createSupplementalGallery(projectKey, true);
+  if (existingGallery && gallery) existingGallery.insertAdjacentElement('afterend', gallery);
+}
+
+mountProjectPageGallery();
+
 function hydrateYouTubeEmbeds(root = document) {
   if (location.protocol === 'file:') return;
   root.querySelectorAll('.youtube-embed[data-youtube-id]').forEach((container) => {
@@ -80,6 +144,10 @@ document.querySelectorAll('.project-open').forEach((button) => button.addEventLi
   const template = button.closest('.project-card')?.querySelector('template');
   if (!dialog || !dialogContent || !template) return;
   dialogContent.replaceChildren(template.content.cloneNode(true));
+  const projectKey = galleryKeyForTitle(dialogContent.querySelector('h2')?.textContent || '');
+  const gallery = createSupplementalGallery(projectKey);
+  const galleryAnchor = dialogContent.querySelector('.modal-media-section, .modal-resources');
+  if (gallery) galleryAnchor ? dialogContent.insertBefore(gallery, galleryAnchor) : dialogContent.append(gallery);
   hydrateYouTubeEmbeds(dialogContent);
   const title = dialogContent.querySelector('h2');
   if (title) title.id = 'dialog-title';
