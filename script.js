@@ -30,21 +30,15 @@ const revealObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach((element) => revealObserver.observe(element));
 
 let selectedType = 'all';
-let selectedYear = 'all';
 const cards = [...document.querySelectorAll('.project-card')];
-const groups = [...document.querySelectorAll('.year-group')];
 const emptyState = document.querySelector('.no-results');
 
 function applyProjectFilters() {
   let totalVisible = 0;
   cards.forEach((card) => {
     const typeMatch = selectedType === 'all' || card.dataset.category.split(' ').includes(selectedType);
-    const yearMatch = selectedYear === 'all' || card.dataset.year === selectedYear;
-    card.hidden = !(typeMatch && yearMatch);
+    card.hidden = !typeMatch;
     if (!card.hidden) totalVisible += 1;
-  });
-  groups.forEach((group) => {
-    group.hidden = ![...group.querySelectorAll('.project-card')].some((card) => !card.hidden);
   });
   if (emptyState) emptyState.hidden = totalVisible > 0;
 }
@@ -62,19 +56,6 @@ document.querySelectorAll('.filter').forEach((button) => {
   });
 });
 
-document.querySelectorAll('.year-filter').forEach((button) => {
-  button.setAttribute('aria-pressed', String(button.classList.contains('is-active')));
-  button.addEventListener('click', () => {
-    selectedYear = button.dataset.year;
-    document.querySelectorAll('.year-filter').forEach((item) => {
-      const active = item === button;
-      item.classList.toggle('is-active', active);
-      item.setAttribute('aria-pressed', String(active));
-    });
-    applyProjectFilters();
-  });
-});
-
 const dialog = document.querySelector('#project-dialog');
 const dialogContent = dialog?.querySelector('.dialog-content');
 const closeButton = dialog?.querySelector('.dialog-close');
@@ -84,7 +65,7 @@ function hydrateYouTubeEmbeds(root = document) {
   root.querySelectorAll('.youtube-embed[data-youtube-id]').forEach((container) => {
     const iframe = document.createElement('iframe');
     iframe.src = `https://www.youtube.com/embed/${container.dataset.youtubeId}?rel=0&playsinline=1`;
-    iframe.title = 'Graphene pollen sensor project video';
+    iframe.title = container.dataset.youtubeTitle || 'Project video';
     iframe.loading = 'lazy';
     iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
     iframe.referrerPolicy = 'strict-origin-when-cross-origin';
