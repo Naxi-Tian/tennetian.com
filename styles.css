@@ -32,6 +32,12 @@
 .project-page .detail-photo-grid figcaption{color:#e7e9e5}
 @media(max-width:720px){.detail-photo-grid,.detail-photo-grid-3{grid-template-columns:1fr}.detail-photo-grid img{height:auto;max-height:420px}}
 
+/* Dense, full-color Competition Field Notes mosaic. */
+.competition-grid{grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-rows:180px;grid-auto-flow:dense;gap:4px}
+.photo-slot img{filter:none}
+@media(max-width:1000px){.competition-grid{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:175px}}
+@media(max-width:720px){.competition-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:160px;gap:3px}}
+
 /* Cinematic homepage — footage can be extended by adding another video and cue. */
 .site-header{position:fixed;inset:0 0 auto;background:linear-gradient(to bottom,rgba(3,6,11,.82),rgba(3,6,11,.48));border-bottom-color:rgba(255,255,255,.12)}
 section[id]{scroll-margin-top:66px}
